@@ -1,0 +1,644 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище GymManagementSystemModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AbonementState">
+          <Key>
+            <PropertyRef Name="idAbonement" />
+          </Key>
+          <Property Name="idAbonement" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="State" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Apparatus">
+          <Key>
+            <PropertyRef Name="idApparatus" />
+          </Key>
+          <Property Name="idApparatus" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameApparatus" Type="nvarchar(max)" />
+          <Property Name="count" Type="int" />
+        </EntityType>
+        <EntityType Name="Attendence">
+          <Key>
+            <PropertyRef Name="idAttendence" />
+          </Key>
+          <Property Name="idAttendence" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idClient" Type="int" Nullable="false" />
+          <Property Name="countTrainings" Type="int" />
+        </EntityType>
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="idClient" />
+          </Key>
+          <Property Name="idClient" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="surnameClient" Type="nvarchar(max)" />
+          <Property Name="nameClient" Type="nvarchar(max)" />
+          <Property Name="patronimicClients" Type="nvarchar(max)" />
+          <Property Name="stateAbonement" Type="int" />
+          <Property Name="idTrainer" Type="int" />
+          <Property Name="telephoneNum" Type="bigint" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="idRole" />
+          </Key>
+          <Property Name="idRole" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameRole" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="idSchedule" />
+          </Key>
+          <Property Name="idSchedule" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idTrainer" Type="int" Nullable="false" />
+          <Property Name="idApparatus" Type="int" Nullable="false" />
+          <Property Name="timeTraining" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Specializations">
+          <Key>
+            <PropertyRef Name="idSpeciaization" />
+          </Key>
+          <Property Name="idSpeciaization" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameTrainers" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Trainers">
+          <Key>
+            <PropertyRef Name="idTrainer" />
+          </Key>
+          <Property Name="idTrainer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="surnameTrainer" Type="nvarchar(max)" />
+          <Property Name="nameTrainer" Type="nvarchar(max)" />
+          <Property Name="patronimicTrainer" Type="nvarchar(max)" />
+          <Property Name="idUser" Type="int" Nullable="false" />
+          <Property Name="idSpecialization" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="login" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="pass" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="idRole" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Attendence_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Attendence" Type="Self.Attendence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="idClient" />
+            </Principal>
+            <Dependent Role="Attendence">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_AbonementState">
+          <End Role="AbonementState" Type="Self.AbonementState" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AbonementState">
+              <PropertyRef Name="idAbonement" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="stateAbonement" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Trainers">
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trainers">
+              <PropertyRef Name="idTrainer" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="idTrainer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_Apparatus">
+          <End Role="Apparatus" Type="Self.Apparatus" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apparatus">
+              <PropertyRef Name="idApparatus" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="idApparatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_Trainers">
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trainers">
+              <PropertyRef Name="idTrainer" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="idTrainer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trainers_Specializations">
+          <End Role="Specializations" Type="Self.Specializations" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specializations">
+              <PropertyRef Name="idSpeciaization" />
+            </Principal>
+            <Dependent Role="Trainers">
+              <PropertyRef Name="idSpecialization" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trainers_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="Trainers">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="idRole" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="idRole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище GymManagementSystemModelContainer">
+          <EntitySet Name="AbonementState" EntityType="Self.AbonementState" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Apparatus" EntityType="Self.Apparatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attendence" EntityType="Self.Attendence" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Specializations" EntityType="Self.Specializations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Trainers" EntityType="Self.Trainers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Attendence_Clients" Association="Self.FK_Attendence_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Attendence" EntitySet="Attendence" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_AbonementState" Association="Self.FK_Clients_AbonementState">
+            <End Role="AbonementState" EntitySet="AbonementState" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Trainers" Association="Self.FK_Clients_Trainers">
+            <End Role="Trainers" EntitySet="Trainers" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_Apparatus" Association="Self.FK_Schedule_Apparatus">
+            <End Role="Apparatus" EntitySet="Apparatus" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_Trainers" Association="Self.FK_Schedule_Trainers">
+            <End Role="Trainers" EntitySet="Trainers" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trainers_Specializations" Association="Self.FK_Trainers_Specializations">
+            <End Role="Specializations" EntitySet="Specializations" />
+            <End Role="Trainers" EntitySet="Trainers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trainers_Users" Association="Self.FK_Trainers_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Trainers" EntitySet="Trainers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GymManagementSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AbonementState">
+          <Key>
+            <PropertyRef Name="idAbonement" />
+          </Key>
+          <Property Name="idAbonement" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="State" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK_Clients_AbonementState" FromRole="AbonementState" ToRole="Clients" />
+        </EntityType>
+        <EntityType Name="Apparatus">
+          <Key>
+            <PropertyRef Name="idApparatus" />
+          </Key>
+          <Property Name="idApparatus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameApparatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="count" Type="Int32" />
+          <NavigationProperty Name="Schedule" Relationship="Self.FK_Schedule_Apparatus" FromRole="Apparatus" ToRole="Schedule" />
+        </EntityType>
+        <EntityType Name="Attendence">
+          <Key>
+            <PropertyRef Name="idAttendence" />
+          </Key>
+          <Property Name="idAttendence" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idClient" Type="Int32" Nullable="false" />
+          <Property Name="countTrainings" Type="Int32" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK_Attendence_Clients" FromRole="Attendence" ToRole="Clients" />
+        </EntityType>
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="idClient" />
+          </Key>
+          <Property Name="idClient" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="surnameClient" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nameClient" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="patronimicClients" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="stateAbonement" Type="Int32" />
+          <Property Name="idTrainer" Type="Int32" />
+          <Property Name="telephoneNum" Type="Int64" />
+          <NavigationProperty Name="AbonementState" Relationship="Self.FK_Clients_AbonementState" FromRole="Clients" ToRole="AbonementState" />
+          <NavigationProperty Name="Attendence" Relationship="Self.FK_Attendence_Clients" FromRole="Clients" ToRole="Attendence" />
+          <NavigationProperty Name="Trainers" Relationship="Self.FK_Clients_Trainers" FromRole="Clients" ToRole="Trainers" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="idRole" />
+          </Key>
+          <Property Name="idRole" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameRole" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Roles" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="idSchedule" />
+          </Key>
+          <Property Name="idSchedule" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idTrainer" Type="Int32" Nullable="false" />
+          <Property Name="idApparatus" Type="Int32" Nullable="false" />
+          <Property Name="timeTraining" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Apparatus" Relationship="Self.FK_Schedule_Apparatus" FromRole="Schedule" ToRole="Apparatus" />
+          <NavigationProperty Name="Trainers" Relationship="Self.FK_Schedule_Trainers" FromRole="Schedule" ToRole="Trainers" />
+        </EntityType>
+        <EntityType Name="Specializations">
+          <Key>
+            <PropertyRef Name="idSpeciaization" />
+          </Key>
+          <Property Name="idSpeciaization" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameTrainers" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Trainers" Relationship="Self.FK_Trainers_Specializations" FromRole="Specializations" ToRole="Trainers" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Trainers">
+          <Key>
+            <PropertyRef Name="idTrainer" />
+          </Key>
+          <Property Name="idTrainer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="surnameTrainer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nameTrainer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="patronimicTrainer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="idUser" Type="Int32" Nullable="false" />
+          <Property Name="idSpecialization" Type="Int32" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK_Clients_Trainers" FromRole="Trainers" ToRole="Clients" />
+          <NavigationProperty Name="Schedule" Relationship="Self.FK_Schedule_Trainers" FromRole="Trainers" ToRole="Schedule" />
+          <NavigationProperty Name="Specializations" Relationship="Self.FK_Trainers_Specializations" FromRole="Trainers" ToRole="Specializations" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Trainers_Users" FromRole="Trainers" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="login" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pass" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="idRole" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Users_Roles" FromRole="Users" ToRole="Roles" />
+          <NavigationProperty Name="Trainers" Relationship="Self.FK_Trainers_Users" FromRole="Users" ToRole="Trainers" />
+        </EntityType>
+        <Association Name="FK_Clients_AbonementState">
+          <End Role="AbonementState" Type="Self.AbonementState" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AbonementState">
+              <PropertyRef Name="idAbonement" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="stateAbonement" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_Apparatus">
+          <End Role="Apparatus" Type="Self.Apparatus" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apparatus">
+              <PropertyRef Name="idApparatus" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="idApparatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attendence_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Attendence" Type="Self.Attendence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="idClient" />
+            </Principal>
+            <Dependent Role="Attendence">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Trainers">
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trainers">
+              <PropertyRef Name="idTrainer" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="idTrainer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="idRole" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="idRole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_Trainers">
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trainers">
+              <PropertyRef Name="idTrainer" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="idTrainer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trainers_Specializations">
+          <End Role="Specializations" Type="Self.Specializations" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specializations">
+              <PropertyRef Name="idSpeciaization" />
+            </Principal>
+            <Dependent Role="Trainers">
+              <PropertyRef Name="idSpecialization" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trainers_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Trainers" Type="Self.Trainers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="idUser" />
+            </Principal>
+            <Dependent Role="Trainers">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GymManagementSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AbonementState" EntityType="Self.AbonementState" />
+          <EntitySet Name="Apparatus" EntityType="Self.Apparatus" />
+          <EntitySet Name="Attendence" EntityType="Self.Attendence" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="Schedule" EntityType="Self.Schedule" />
+          <EntitySet Name="Specializations" EntityType="Self.Specializations" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Trainers" EntityType="Self.Trainers" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_Clients_AbonementState" Association="Self.FK_Clients_AbonementState">
+            <End Role="AbonementState" EntitySet="AbonementState" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_Apparatus" Association="Self.FK_Schedule_Apparatus">
+            <End Role="Apparatus" EntitySet="Apparatus" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attendence_Clients" Association="Self.FK_Attendence_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Attendence" EntitySet="Attendence" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Trainers" Association="Self.FK_Clients_Trainers">
+            <End Role="Trainers" EntitySet="Trainers" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_Trainers" Association="Self.FK_Schedule_Trainers">
+            <End Role="Trainers" EntitySet="Trainers" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trainers_Specializations" Association="Self.FK_Trainers_Specializations">
+            <End Role="Specializations" EntitySet="Specializations" />
+            <End Role="Trainers" EntitySet="Trainers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trainers_Users" Association="Self.FK_Trainers_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Trainers" EntitySet="Trainers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище GymManagementSystemModelContainer" CdmEntityContainer="GymManagementSystemEntities">
+          <EntitySetMapping Name="AbonementState">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.AbonementState">
+              <MappingFragment StoreEntitySet="AbonementState">
+                <ScalarProperty Name="idAbonement" ColumnName="idAbonement" />
+                <ScalarProperty Name="State" ColumnName="State" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Apparatus">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Apparatus">
+              <MappingFragment StoreEntitySet="Apparatus">
+                <ScalarProperty Name="idApparatus" ColumnName="idApparatus" />
+                <ScalarProperty Name="nameApparatus" ColumnName="nameApparatus" />
+                <ScalarProperty Name="count" ColumnName="count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Attendence">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Attendence">
+              <MappingFragment StoreEntitySet="Attendence">
+                <ScalarProperty Name="idAttendence" ColumnName="idAttendence" />
+                <ScalarProperty Name="idClient" ColumnName="idClient" />
+                <ScalarProperty Name="countTrainings" ColumnName="countTrainings" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Clients">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="idClient" ColumnName="idClient" />
+                <ScalarProperty Name="surnameClient" ColumnName="surnameClient" />
+                <ScalarProperty Name="nameClient" ColumnName="nameClient" />
+                <ScalarProperty Name="patronimicClients" ColumnName="patronimicClients" />
+                <ScalarProperty Name="stateAbonement" ColumnName="stateAbonement" />
+                <ScalarProperty Name="idTrainer" ColumnName="idTrainer" />
+                <ScalarProperty Name="telephoneNum" ColumnName="telephoneNum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="idRole" ColumnName="idRole" />
+                <ScalarProperty Name="nameRole" ColumnName="nameRole" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schedule">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Schedule">
+              <MappingFragment StoreEntitySet="Schedule">
+                <ScalarProperty Name="idSchedule" ColumnName="idSchedule" />
+                <ScalarProperty Name="idTrainer" ColumnName="idTrainer" />
+                <ScalarProperty Name="idApparatus" ColumnName="idApparatus" />
+                <ScalarProperty Name="timeTraining" ColumnName="timeTraining" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Specializations">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Specializations">
+              <MappingFragment StoreEntitySet="Specializations">
+                <ScalarProperty Name="idSpeciaization" ColumnName="idSpeciaization" />
+                <ScalarProperty Name="nameTrainers" ColumnName="nameTrainers" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trainers">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Trainers">
+              <MappingFragment StoreEntitySet="Trainers">
+                <ScalarProperty Name="idTrainer" ColumnName="idTrainer" />
+                <ScalarProperty Name="surnameTrainer" ColumnName="surnameTrainer" />
+                <ScalarProperty Name="nameTrainer" ColumnName="nameTrainer" />
+                <ScalarProperty Name="patronimicTrainer" ColumnName="patronimicTrainer" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="idSpecialization" ColumnName="idSpecialization" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="GymManagementSystemModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="pass" ColumnName="pass" />
+                <ScalarProperty Name="idRole" ColumnName="idRole" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

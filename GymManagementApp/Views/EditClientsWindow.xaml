@@ -1,0 +1,35 @@
+﻿<Window x:Class="GymManagementApp.Views.EditClientsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GymManagementApp.Views"
+        mc:Ignorable="d"
+        Title="Редактировать клиента" Height="1080" Width="1920" WindowState="Maximized">
+    <Grid>
+
+        <DataGrid x:Name="ClientGrid" AutoGenerateColumns="False"  Height="500" Width="1546" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedCellsChanged="ClientGrid_SelectedCellsChanged" >
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=surnameClient}" x:Name="surname"/>
+                <DataGridTextColumn Binding="{Binding Path=nameClient}" x:Name="name"/>
+                <DataGridTextColumn Binding="{Binding Path=patronimicClients}" x:Name="patronimic"/>
+                <DataGridTextColumn Binding="{Binding Path=telephoneNum}" x:Name="telephone"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Width="296" Height="50" Content="Добавить клиента" x:Name="AddButton" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" FontSize="22" Margin="0,30,10,0" Click="AddButton_Click" />
+        <Button Width="296" Height="50" Content="Редактировать клиента" x:Name="EditButton" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" FontSize="22" Margin="0,100,10,0" Click="EditButton_Click" />
+        <Button Width="296" Height="50" Content="Удалить клиента" x:Name="DeleteButton" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" FontSize="22" Margin="0,170,10,0" Click="DeleteButton_Click" />
+        <Button Width="296" Height="50" Content="Выход" x:Name="ExitButton" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" FontSize="22" Margin="0,900,10,0" Click="ExitButton_Click" />
+        <StackPanel Height="463" VerticalAlignment="Bottom" Width="1000" HorizontalAlignment="Left">
+            <TextBlock Text="Фамилия" FontSize="30" />
+            <TextBox  FontSize="30" Name="SurnameBox" />
+            <TextBlock Text="Имя" FontSize="30"  />
+            <TextBox  FontSize="30" Name="NameBox" />
+            <TextBlock Text="Отчество" FontSize="30" />
+            <TextBox  FontSize="30"  Name="PatonimicBox" />
+            <TextBlock Text="Номер телефона" FontSize="30" />
+            <TextBox  FontSize="30" Name="TelephoneBox" />
+        </StackPanel>
+    </Grid>
+</Window>
